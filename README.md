@@ -4,8 +4,9 @@
 
 **Workshop:** *Why Open Source AI Changes Everything — And How to Use It This Weekend*
 **Event:** CivicHacks 2026 · Boston University · February 21–22, 2026
+
 **Presenter:** Jan Mark Holzer, Distinguished Engineer, Red Hat
-**Presenter:** Lucas Yoonr, Senior Software Engineer, Red Hat
+**Presenter:** Lucas Yoon, Senior Software Engineer, Red Hat
 
 ---
 
