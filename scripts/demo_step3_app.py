@@ -185,15 +185,14 @@ print("   ✅ Ready!\n")
 # ── Build the Gradio UI ───────────────────────────────────────────
 # THIS IS THE "5 LINES OF UI" MOMENT — Gradio makes it trivial
 
-with gr.Blocks(
-    title="CivicHacks AI Assistant",
-    theme=gr.themes.Soft(primary_hue="red", secondary_hue="slate"),
-    css="""
+THEME = gr.themes.Soft(primary_hue="red", secondary_hue="slate")
+CSS = """
     .header { text-align: center; margin-bottom: 1rem; }
     .header h1 { color: #CC0000; margin-bottom: 0.25rem; }
     .footer { text-align: center; font-size: 0.85rem; color: #888; margin-top: 1rem; }
-    """
-) as app:
+"""
+
+with gr.Blocks(title="CivicHacks AI Assistant") as app:
 
     gr.HTML(f"""
     <div class="header">
@@ -215,7 +214,6 @@ with gr.Blocks(
     chatbot = gr.Chatbot(
         label="Civic AI Chat",
         height=420,
-        type="messages",
         avatar_images=(None, "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Red_Hat_logo.svg/120px-Red_Hat_logo.svg.png"),
     )
 
@@ -267,4 +265,6 @@ if __name__ == "__main__":
         server_name="0.0.0.0",
         server_port=args.port,
         share=args.share,
+        theme=THEME,
+        css=CSS,
     )
