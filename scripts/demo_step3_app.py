@@ -53,6 +53,13 @@ TRACKS = {
     "⚖️ JusticeHack — MA Criminal Justice": "justicehack_ma_justice.txt",
 }
 
+TRACK_DESCRIPTIONS = {
+    "🌿 EcoHack — Boston Environment": "Explore Boston's environmental quality, climate risks, and environmental justice data.",
+    "🏙️ CityHack — Boston 311 Services": "Analyze Boston 311 service requests, response times, and equity in city services.",
+    "📚 EduHack — Boston Public Schools": "Investigate achievement gaps, transportation barriers, and equity in Boston schools.",
+    "⚖️ JusticeHack — MA Criminal Justice": "Examine pretrial detention, reentry programs, and policing patterns in Massachusetts.",
+}
+
 EXAMPLE_QUESTIONS = {
     "🌿 EcoHack — Boston Environment": [
         "Which neighborhoods face the worst environmental injustice?",
@@ -120,10 +127,25 @@ def query_civic_data(question, track_name, history):
     history = history + [{"role": "assistant", "content": answer}]
     return history, ""
 
-def update_examples(track_name):
-    """Update example questions when track changes."""
-    examples = EXAMPLE_QUESTIONS.get(track_name, [])
-    return gr.update(samples=[[q] for q in examples])
+def build_header_html(track_name):
+    """Build the header HTML for a given track."""
+    desc = TRACK_DESCRIPTIONS.get(track_name, "")
+    return f"""
+    <div class="header">
+        <h1>🏛️ CivicHacks AI Assistant</h1>
+        <h3>{track_name}</h3>
+        <p>{desc}<br>
+        Powered by <strong>open source AI</strong> running locally on <strong>{HOSTNAME}</strong><br>
+        <em>Started: {STARTED_AT}</em> — no cloud, no cost, no data leaving this machine.</p>
+    </div>
+    """
+
+def on_track_change(track_name):
+    """Update header and example questions when track changes."""
+    header = build_header_html(track_name)
+    questions = EXAMPLE_QUESTIONS.get(track_name, [])
+    dataset = gr.Dataset(samples=[[q] for q in questions])
+    return header, dataset
 
 # ── Parse arguments ───────────────────────────────────────────────
 def parse_args():
@@ -189,24 +211,19 @@ THEME = gr.themes.Soft(primary_hue="red", secondary_hue="slate")
 CSS = """
     .header { text-align: center; margin-bottom: 1rem; }
     .header h1 { color: #CC0000; margin-bottom: 0.25rem; }
+    .header h3 { color: #555; margin-top: 0; margin-bottom: 0.5rem; font-weight: normal; }
     .footer { text-align: center; font-size: 0.85rem; color: #888; margin-top: 1rem; }
 """
 
 with gr.Blocks(title="CivicHacks AI Assistant") as app:
 
-    gr.HTML(f"""
-    <div class="header">
-        <h1>🏛️ CivicHacks AI Assistant</h1>
-        <p>Ask questions about real Boston &amp; Massachusetts civic data.<br>
-        Powered by <strong>open source AI</strong> running locally on <strong>{HOSTNAME}</strong><br>
-        <em>Started: {STARTED_AT}</em> — no cloud, no cost, no data leaving this machine.</p>
-    </div>
-    """)
+    default_track = list(TRACKS.keys())[1]  # CityHack
+    header = gr.HTML(build_header_html(default_track))
 
     with gr.Row():
         track_selector = gr.Dropdown(
             choices=list(TRACKS.keys()),
-            value=list(TRACKS.keys())[1],  # Default to CityHack
+            value=default_track,
             label="Select Your Track",
             interactive=True,
         )
@@ -227,7 +244,7 @@ with gr.Blocks(title="CivicHacks AI Assistant") as app:
         submit_btn = gr.Button("Ask", variant="primary", scale=1)
 
     examples = gr.Examples(
-        examples=[[q] for q in EXAMPLE_QUESTIONS[list(TRACKS.keys())[1]]],
+        examples=[[q] for q in EXAMPLE_QUESTIONS[default_track]],
         inputs=[question_input],
         label="Try these questions:",
     )
@@ -256,8 +273,12 @@ with gr.Blocks(title="CivicHacks AI Assistant") as app:
         outputs=[chatbot, question_input],
     )
 
-    # Note: Dynamic example updating requires more complex Gradio patterns
-    # For the demo, the default examples work great
+    # Update header and example questions when track changes
+    track_selector.change(
+        fn=on_track_change,
+        inputs=[track_selector],
+        outputs=[header, examples.dataset],
+    )
 
 # ── Launch ─────────────────────────────────────────────────────────
 if __name__ == "__main__":
