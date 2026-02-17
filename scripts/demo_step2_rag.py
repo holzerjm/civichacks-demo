@@ -41,6 +41,7 @@ warnings.filterwarnings("ignore", message=".*unauthenticated.*HF Hub.*")
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings
 from llama_index.llms.ollama import Ollama
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from cost_estimator import format_cost_comparison
 
 # ── Track configuration ────────────────────────────────────────────
 # The audience voted on a track — swap the data file & sample query
@@ -208,7 +209,14 @@ def main():
         response.print_response_stream()
         elapsed = time.time() - start
 
-        print(f"\n\n⏱️  Answered in {elapsed:.1f}s | Cost: $0.00")
+        # Estimate tokens from response text (~1.3 tokens per word for English)
+        response_text = str(response)
+        est_output_tokens = int(len(response_text.split()) * 1.3)
+        est_input_tokens = int(len(query.split()) * 1.3) + 200  # query + RAG context
+
+        cost_line = format_cost_comparison(elapsed, est_input_tokens, est_output_tokens)
+        print(f"\n\n⏱️  {elapsed:.1f}s · ~{est_output_tokens} tokens")
+        print(cost_line)
         print()
 
     print(f"{'═' * 60}")

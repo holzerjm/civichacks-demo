@@ -21,6 +21,7 @@ import platform
 import sys
 import time
 from datetime import datetime
+from cost_estimator import format_cost_comparison
 
 # ── A civic-flavored prompt to make the demo relevant ──────────────
 PROMPT = """You are a civic technology advisor. In 3 concise bullet points,
@@ -60,7 +61,6 @@ def main():
     print("\n🏛️  CivicHacks 2026 — Open Source AI, Running Locally\n")
     print(f"📡 Model: llama3.1 (8B) — running on {hostname}")
     print(f"🕐 Time: {now}")
-    print(f"💰 Cost: $0.00")
     print(f"🔒 Data: never leaves {hostname}\n")
     print("─" * 60)
     print(f"\n💬 Prompt: {PROMPT.strip()}\n")
@@ -76,17 +76,25 @@ def main():
         stream=True,
     )
 
-    token_count = 0
+    last_chunk = None
     for chunk in stream:
         content = chunk["message"]["content"]
         print(content, end="", flush=True)
-        token_count += len(content.split())
+        last_chunk = chunk
 
     elapsed = time.time() - start
+
+    # Extract token counts from Ollama's final streaming chunk
+    input_tokens = getattr(last_chunk, "prompt_eval_count", 0) or 0
+    output_tokens = getattr(last_chunk, "eval_count", 0) or 0
+
+    cost_line = format_cost_comparison(elapsed, input_tokens, output_tokens)
+
     print(f"\n\n─" + "─" * 59)
-    print(f"⏱️  Generated in {elapsed:.1f}s  |  ~{token_count} words  |  Cost: $0.00")
+    print(f"⏱️  {elapsed:.1f}s · {output_tokens} tokens · {output_tokens/elapsed:.0f} tok/s")
+    print(f"{cost_line}")
     print(f"─" * 60)
-    print(f"\n✅ That's it. Local AI. Free. Private. Ready to build with.\n")
+    print(f"\n✅ That's it. Local AI. Private. And virtually free.\n")
 
 if __name__ == "__main__":
     main()

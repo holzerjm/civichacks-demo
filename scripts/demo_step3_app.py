@@ -41,6 +41,7 @@ warnings.filterwarnings("ignore", message=".*unauthenticated.*HF Hub.*")
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings
 from llama_index.llms.ollama import Ollama
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from cost_estimator import format_cost_short
 
 # ── Data files for each track ──────────────────────────────────────
 DATA_DIR = Path(__file__).parent.parent / "data"
@@ -108,7 +109,13 @@ def query_civic_data(question, track_name, history):
     elapsed = time.time() - start
 
     answer = str(response)
-    answer += f"\n\n---\n*⏱️ {elapsed:.1f}s · 🤖 llama3.1 via Ollama on {HOSTNAME} · 💰 $0.00*"
+
+    # Estimate tokens for cost comparison
+    est_output_tokens = int(len(answer.split()) * 1.3)
+    est_input_tokens = int(len(question.split()) * 1.3) + 200
+    cost_info = format_cost_short(elapsed, est_input_tokens, est_output_tokens)
+
+    answer += f"\n\n---\n*⏱️ {elapsed:.1f}s · 🤖 llama3.1 on {HOSTNAME} · 💰 {cost_info}*"
 
     history = history + [{"role": "assistant", "content": answer}]
     return history, ""
@@ -232,8 +239,8 @@ with gr.Blocks(
         <strong>Stack:</strong> Ollama + LlamaIndex + Gradio ·
         <strong>Model:</strong> Llama 3.1 8B ·
         <strong>Host:</strong> {HOSTNAME} ·
-        <strong>Cost:</strong> $0.00 ·
-        <strong>Data Privacy:</strong> 100% local<br>
+        <strong>Data Privacy:</strong> 100% local ·
+        <strong>Cost:</strong> per-query estimate shown in each response<br>
         Built for <strong>CivicHacks 2026</strong> at Boston University ·
         Templates at <a href="https://aitemplates.io" target="_blank">aitemplates.io</a>
     </div>
