@@ -17,7 +17,9 @@ PREREQUISITES:
 """
 
 import gradio as gr
+import platform
 import time
+from datetime import datetime
 from pathlib import Path
 
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings
@@ -90,7 +92,7 @@ def query_civic_data(question, track_name, history):
     elapsed = time.time() - start
 
     answer = str(response)
-    answer += f"\n\n---\n*⏱️ {elapsed:.1f}s · 🤖 llama3.1 via Ollama · 💰 $0.00*"
+    answer += f"\n\n---\n*⏱️ {elapsed:.1f}s · 🤖 llama3.1 via Ollama on {HOSTNAME} · 💰 $0.00*"
 
     history = history + [{"role": "assistant", "content": answer}]
     return history, ""
@@ -100,8 +102,14 @@ def update_examples(track_name):
     examples = EXAMPLE_QUESTIONS.get(track_name, [])
     return gr.update(samples=[[q] for q in examples])
 
+# ── Machine identity (shown in UI so audience knows it's live & local) ──
+HOSTNAME = platform.node()
+STARTED_AT = datetime.now().strftime("%B %d, %Y at %I:%M:%S %p")
+
 # ── Initialize LLM ────────────────────────────────────────────────
 print("⚙️  Starting CivicHacks AI Assistant...")
+print(f"   Host: {HOSTNAME}")
+print(f"   Time: {STARTED_AT}")
 print("   Connecting to Ollama (llama3.1)...")
 Settings.llm = Ollama(model="llama3.1", request_timeout=120.0)
 Settings.embed_model = HuggingFaceEmbedding(model_name="all-MiniLM-L6-v2")
@@ -120,11 +128,12 @@ with gr.Blocks(
     """
 ) as app:
 
-    gr.HTML("""
+    gr.HTML(f"""
     <div class="header">
         <h1>🏛️ CivicHacks AI Assistant</h1>
-        <p>Ask questions about real Boston & Massachusetts civic data.<br>
-        Powered by <strong>open source AI</strong> running locally — no cloud, no cost, no data leaving your machine.</p>
+        <p>Ask questions about real Boston &amp; Massachusetts civic data.<br>
+        Powered by <strong>open source AI</strong> running locally on <strong>{HOSTNAME}</strong><br>
+        <em>Started: {STARTED_AT}</em> — no cloud, no cost, no data leaving this machine.</p>
     </div>
     """)
 
@@ -158,13 +167,14 @@ with gr.Blocks(
         label="Try these questions:",
     )
 
-    gr.HTML("""
+    gr.HTML(f"""
     <div class="footer">
-        <strong>Stack:</strong> Ollama + LlamaIndex + Gradio · 
-        <strong>Model:</strong> Llama 3.1 8B (local) · 
-        <strong>Cost:</strong> $0.00 · 
+        <strong>Stack:</strong> Ollama + LlamaIndex + Gradio ·
+        <strong>Model:</strong> Llama 3.1 8B ·
+        <strong>Host:</strong> {HOSTNAME} ·
+        <strong>Cost:</strong> $0.00 ·
         <strong>Data Privacy:</strong> 100% local<br>
-        Built for <strong>CivicHacks 2026</strong> at Boston University · 
+        Built for <strong>CivicHacks 2026</strong> at Boston University ·
         Templates at <a href="https://aitemplates.io" target="_blank">aitemplates.io</a>
     </div>
     """)

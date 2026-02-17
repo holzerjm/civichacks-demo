@@ -16,8 +16,10 @@ PREREQUISITES:
   $ pip install llama-index llama-index-llms-ollama llama-index-embeddings-huggingface
 """
 
+import platform
 import sys
 import time
+from datetime import datetime
 from pathlib import Path
 
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings
@@ -76,13 +78,18 @@ def main():
     data_dir = Path(__file__).parent.parent / "data"
     data_file = data_dir / track["file"]
 
+    hostname = platform.node()
+    now = datetime.now().strftime("%B %d, %Y at %I:%M:%S %p")
+
     print(f"\n{'═' * 60}")
     print(f"  CIVICHACKS 2026 — RAG Demo: {track['name']}")
     print(f"{'═' * 60}\n")
 
     # ── Step A: Configure local AI (no API keys!) ──────────────────
     print("⚙️  Configuring local AI stack...")
-    print("   Model: llama3.1 (via Ollama — running locally)")
+    print(f"   Host: {hostname}")
+    print(f"   Time: {now}")
+    print(f"   Model: llama3.1 (via Ollama — running on {hostname})")
     print("   Embeddings: all-MiniLM-L6-v2 (runs on CPU)\n")
 
     Settings.llm = Ollama(model="llama3.1", request_timeout=120.0)

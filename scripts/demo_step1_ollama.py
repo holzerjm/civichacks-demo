@@ -16,8 +16,10 @@ PREREQUISITE: Ollama installed and model pulled
 """
 
 import ollama
+import platform
 import sys
 import time
+from datetime import datetime
 
 # ── A civic-flavored prompt to make the demo relevant ──────────────
 PROMPT = """You are a civic technology advisor. In 3 concise bullet points,
@@ -26,10 +28,14 @@ communities — especially for students at a hackathon who want to
 make a real impact this weekend."""
 
 def main():
+    hostname = platform.node()
+    now = datetime.now().strftime("%B %d, %Y at %I:%M:%S %p")
+
     print("\n🏛️  CivicHacks 2026 — Open Source AI, Running Locally\n")
-    print(f"📡 Model: llama3.1 (8B) — running on THIS laptop")
+    print(f"📡 Model: llama3.1 (8B) — running on {hostname}")
+    print(f"🕐 Time: {now}")
     print(f"💰 Cost: $0.00")
-    print(f"🔒 Data: never leaves this machine\n")
+    print(f"🔒 Data: never leaves {hostname}\n")
     print("─" * 60)
     print(f"\n💬 Prompt: {PROMPT.strip()}\n")
     print("─" * 60)
