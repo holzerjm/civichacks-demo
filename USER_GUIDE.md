@@ -15,13 +15,14 @@
 5. [Step 1 — Local AI with Ollama](#step-1--local-ai-with-ollama)
 6. [Step 2 — RAG with Civic Data](#step-2--rag-with-civic-data)
 7. [Step 3 — Gradio Web Application](#step-3--gradio-web-application)
-8. [Civic Datasets Reference](#civic-datasets-reference)
-9. [Live Demo Presenter Guide](#live-demo-presenter-guide)
-10. [Customization & Adaptation](#customization--adaptation)
-11. [Deployment Options](#deployment-options)
-12. [Troubleshooting](#troubleshooting)
-13. [Resources & Further Reading](#resources--further-reading)
-14. [License](#license)
+8. [Step 4 — Bring Your Own Data](#step-4--bring-your-own-data)
+9. [Civic Datasets Reference](#civic-datasets-reference)
+10. [Live Demo Presenter Guide](#live-demo-presenter-guide)
+11. [Customization & Adaptation](#customization--adaptation)
+12. [Deployment Options](#deployment-options)
+13. [Troubleshooting](#troubleshooting)
+14. [Resources & Further Reading](#resources--further-reading)
+15. [License](#license)
 
 ---
 
@@ -36,6 +37,7 @@ This project is a live-demo toolkit that builds a **complete civic AI applicatio
 | Step 1 | ~60 sec | "AI runs on a laptop for free" |
 | Step 2 | ~90 sec | "It can analyze our city's data" |
 | Step 3 | ~60 sec | "That's a real product — built in minutes" |
+| Step 4 | ~3-5 min | "Now plug in YOUR data and start asking questions" |
 
 The demo uses **synthetic but realistic Boston and Massachusetts civic datasets** covering four hackathon tracks: EcoHack (environment), CityHack (311 services), EduHack (public schools), and JusticeHack (criminal justice). The audience votes on which track to demo live, creating engagement and ownership.
 
@@ -191,7 +193,8 @@ civichacks-demo/
     ├── cost_estimator.py                 # Shared: local vs. cloud cost comparison
     ├── demo_step1_ollama.py              # Step 1: Basic local AI inference
     ├── demo_step2_rag.py                 # Step 2: RAG with civic data
-    └── demo_step3_app.py                 # Step 3: Full Gradio web app
+    ├── demo_step3_app.py                 # Step 3: Full Gradio web app
+    └── demo_step4_byod.py               # Step 4: Bring Your Own Data (interactive)
 ```
 
 ---
@@ -460,6 +463,137 @@ python scripts/demo_step3_app.py --help       # Show all options
 
 ---
 
+## Step 4 — Bring Your Own Data
+
+**File:** `scripts/demo_step4_byod.py`
+**Purpose:** Let attendees plug in their own data file and interactively ask questions about it
+**Duration:** ~3-5 minutes (interactive hands-on segment)
+
+### What It Does
+
+An interactive terminal-based script that:
+1. Accepts any data file (`.txt`, `.pdf`, `.csv`, `.docx`) — via CLI argument or drag-and-drop prompt
+2. Analyzes the file (type, size, word count, content preview)
+3. Builds a vector index and generates an AI summary of the contents
+4. Enters an interactive Q&A loop where the user types questions and gets AI answers grounded in their data
+5. Shows cost comparison (local electricity vs. cloud API) on every query
+
+### How to Run
+
+```bash
+# With a file path
+python scripts/demo_step4_byod.py path/to/your/file.txt
+
+# With a PDF
+python scripts/demo_step4_byod.py ~/Downloads/report.pdf
+
+# Interactive prompt (drag and drop a file into the terminal)
+python scripts/demo_step4_byod.py
+
+# Use a different model
+python scripts/demo_step4_byod.py myfile.txt --model phi3:mini
+
+# Show usage info
+python scripts/demo_step4_byod.py --help
+```
+
+### Supported File Types
+
+| Extension | Type | Notes |
+|-----------|------|-------|
+| `.txt` | Plain text | Simplest option, works everywhere |
+| `.pdf` | PDF document | Requires `llama-index-readers-file` (already in requirements) |
+| `.csv` | CSV spreadsheet | Read as text content |
+| `.docx` | Word document | Requires `llama-index-readers-file` |
+
+### Expected Output
+
+```
+════════════════════════════════════════════════════════════
+  CIVICHACKS 2026 — Bring Your Own Data
+════════════════════════════════════════════════════════════
+
+  Configuring local AI stack...
+   Host: jholzer-mac
+   Time: February 21, 2026 at 02:15:30 PM
+   Model: llama3.1 (via Ollama — running on jholzer-mac)
+   Embeddings: all-MiniLM-L6-v2 (runs on CPU)
+
+────────────────────────────────────────────────────────────
+  File Analysis
+────────────────────────────────────────────────────────────
+
+   File:      boston_budget_2026.pdf
+   Path:      /Users/attendee/Downloads/boston_budget_2026.pdf
+   Type:      PDF document
+   Size:      2.4 MB
+   Modified:  February 18, 2026
+
+   Content:   3 document(s), 45,230 characters, ~8,120 words
+
+   Preview:
+   "CITY OF BOSTON FISCAL YEAR 2026 OPERATING BUDGET..."
+
+────────────────────────────────────────────────────────────
+
+  Building vector index (this is the 'RAG' magic)...
+   Index built in 2.3s
+
+────────────────────────────────────────────────────────────
+  AI Summary of: boston_budget_2026.pdf
+────────────────────────────────────────────────────────────
+
+  [Streamed AI response — topic summary, key data points,
+   and suggested questions about the data]
+
+  8.4s · ~185 tokens
+  Local: $0.000010 (0.035 Wh @ 15W) · GPT-4o: $0.0023 (230x more)
+
+════════════════════════════════════════════════════════════
+  Interactive Q&A — Ask anything about your data
+  Type 'quit' to end | 'help' for commands
+════════════════════════════════════════════════════════════
+
+  [You] >> What are the biggest budget increases this year?
+
+  [Streamed AI answer grounded in the document data...]
+
+  [You] >> quit
+
+════════════════════════════════════════════════════════════
+  Session complete — 1 question answered
+  All processing done locally on jholzer-mac.
+  Zero data sent to the cloud.
+════════════════════════════════════════════════════════════
+```
+
+### Interactive Commands
+
+| Command | Action |
+|---------|--------|
+| *(any question)* | Query the AI about your data |
+| `summary` | Re-generate the AI summary |
+| `help` | Show available commands |
+| `quit` / `exit` / `q` | End the session |
+
+### How It Works Internally
+
+1. **`validate_file()`** resolves the path, checks extension and file size, handles drag-and-drop quote stripping
+2. **`analyze_file()`** loads the file via `SimpleDirectoryReader`, prints metadata and a content preview
+3. **`VectorStoreIndex.from_documents()`** builds the in-memory vector index (same as Steps 2 & 3)
+4. **`generate_summary()`** queries the index with a summary prompt and streams the AI response
+5. **`interactive_loop()`** runs the Q&A loop — each question is an independent RAG query with cost comparison
+6. Ctrl+C is caught cleanly (no Python traceback during live demos)
+
+### Command-Line Options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `file` | *(prompted)* | Path to data file (positional, optional) |
+| `--model` | `llama3.1` | Ollama model to use (lets attendees try different models) |
+
+---
+
 ## Civic Datasets Reference
 
 All four datasets are **synthetic but realistic** — fabricated for demonstration purposes using real-world patterns. They live in the `data/` directory as plain `.txt` files.
@@ -525,6 +659,7 @@ All four datasets are **synthetic but realistic** — fabricated for demonstrati
 | ~Minute 15 | Audience Vote | Audience picks a track (EcoHack, CityHack, EduHack, JusticeHack) |
 | ~Minute 20 | Step 2 | Run `demo_step2_rag.py <track>` — show RAG with real data |
 | ~Minute 32 | Step 3 | Run `demo_step3_app.py` — reveal the web app |
+| ~Minute 40 | Step 4 | Run `demo_step4_byod.py` — attendee brings their own data |
 
 ### Before Going on Stage
 
@@ -553,6 +688,9 @@ All four datasets are **synthetic but realistic** — fabricated for demonstrati
 
 **Step 3 — The kicker:**
 > "Ollama — free. Llama 3.1 — free. LlamaIndex — free. Gradio — free. Every query costs fractions of a cent in electricity. That's what open source AI makes possible."
+
+**Step 4 — Bring Your Own Data:**
+> "You've seen what our civic data can do. But what about YOUR data? Got a PDF, a spreadsheet, a text file? Drop it in and start asking questions — no code changes, no configuration. That's the whole point of open source AI — you're not limited to what we prepared."
 
 ---
 

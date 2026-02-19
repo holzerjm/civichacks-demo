@@ -47,7 +47,7 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 4. Run the three demo steps
+### 4. Run the demo steps
 
 ```bash
 # Step 1 — Local AI in your terminal
@@ -59,6 +59,9 @@ python scripts/demo_step2_rag.py city
 # Step 3 — Launch the web app
 python scripts/demo_step3_app.py
 # Opens at http://localhost:7860
+
+# Step 4 — Bring Your Own Data (interactive Q&A with any file)
+python scripts/demo_step4_byod.py path/to/your/file.txt
 ```
 
 That's it — you now have a working civic AI application. From here you can:
@@ -73,6 +76,7 @@ Every script supports `--help` for full usage details:
 python scripts/demo_step1_ollama.py --help
 python scripts/demo_step2_rag.py --help
 python scripts/demo_step3_app.py --help
+python scripts/demo_step4_byod.py --help
 ```
 
 > **Tip:** If you're at the hackathon and wifi is slow, pair up with someone who already has the model downloaded. Ollama only needs to download once — after that everything runs offline.
@@ -88,6 +92,7 @@ This demo builds a **complete civic AI application** live on stage, in three pro
 | **Step 1** | Run a local AI model | ~60 seconds | "AI runs on a laptop for free" |
 | **Step 2** | Connect it to real civic data (RAG) | ~90 seconds | "It can analyze our city's data" |
 | **Step 3** | Wrap it in a web app | ~60 seconds | "That's a real product — built in minutes" |
+| **Step 4** | Bring Your Own Data | ~3-5 minutes | "Now plug in YOUR data and start asking questions" |
 
 The demo uses **real Boston and Massachusetts civic datasets** covering all four hackathon tracks (EcoHack, CityHack, EduHack, JusticeHack). The audience votes on which track to demo, creating investment and ownership.
 
@@ -258,6 +263,29 @@ python scripts/demo_step3_app.py
 
 ---
 
+### STEP 4: "Bring Your Own Data" (During Hands-on Segment)
+
+**Setup:** This is the interactive segment where attendees try it themselves. An audience member provides a file.
+
+**Script:**
+> "You've seen what our civic data can do. But what about YOUR data? Got a PDF, a spreadsheet, a text file? Drop it in and start asking questions — no code changes, no configuration."
+
+**Run:**
+```bash
+# With a file path
+python scripts/demo_step4_byod.py ~/Downloads/my_report.pdf
+
+# Or let it prompt interactively (drag and drop a file into the terminal)
+python scripts/demo_step4_byod.py
+```
+
+**What happens:** The script analyzes the file (type, size, content preview), builds a vector index, generates an AI summary of the contents, and then enters an interactive Q&A loop. The attendee types questions and gets AI answers grounded in their actual data — with cost comparison on every query.
+
+**Talking point:**
+> "That's the whole point of open source AI — you're not limited to what we prepared. Any data, any question, running on your laptop. Now imagine what you could build this weekend."
+
+---
+
 ## Troubleshooting
 
 ### "Ollama isn't responding"
@@ -342,7 +370,8 @@ civichacks-demo/
     ├── cost_estimator.py        ← Shared: local vs. cloud cost comparison
     ├── demo_step1_ollama.py     ← Step 1: Basic local AI
     ├── demo_step2_rag.py        ← Step 2: RAG with civic data
-    └── demo_step3_app.py        ← Step 3: Full web application
+    ├── demo_step3_app.py        ← Step 3: Full web application
+    └── demo_step4_byod.py       ← Step 4: Bring Your Own Data (interactive)
 ```
 
 ---
