@@ -1,11 +1,11 @@
 """
 ╔══════════════════════════════════════════════════════════════╗
-║  CIVICHACKS 2026 — LIVE DEMO STEP 4                        ║
+║  CIVICHACKS 2026 — LIVE DEMO STEP 4                          ║
 ║  "Bring Your Own Data"                                       ║
 ║                                                              ║
-║  Proves: You can plug in ANY file and start querying it     ║
-║  with AI instantly — no code changes needed                 ║
-║  Time on stage: ~3-5 minutes (interactive)                  ║
+║  Proves: You can plug in ANY file and start querying it      ║
+║  with AI instantly — no code changes needed                  ║
+║  Time on stage: ~3-5 minutes (interactive)                   ║
 ╚══════════════════════════════════════════════════════════════╝
 
 Run this after the main demo (Steps 1-3) during the hands-on

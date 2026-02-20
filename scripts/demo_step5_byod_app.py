@@ -1,10 +1,10 @@
 """
 ╔══════════════════════════════════════════════════════════════╗
-║  CIVICHACKS 2026 — LIVE DEMO STEP 5                        ║
-║  "Bring Your Own Data — Web App Edition"                    ║
+║  CIVICHACKS 2026 — LIVE DEMO STEP 5                          ║
+║  "Bring Your Own Data — Web App Edition"                     ║
 ║                                                              ║
-║  Proves: Your BYOD AI tool works as a shareable web app    ║
-║  Time on stage: ~2 minutes (just run it, browser opens)     ║
+║  Proves: Your BYOD AI tool works as a shareable web app      ║
+║  Time on stage: ~2 minutes (just run it, browser opens)      ║
 ╚══════════════════════════════════════════════════════════════╝
 
 Run this after Step 4 to show the same BYOD capability

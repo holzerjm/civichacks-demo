@@ -10,7 +10,33 @@
 
 **Presenter:** Wiolliam Caban, Principal Product Manager, GenAI, Red Hat
 
-**Presenter:** Lucas Yoon, Senior Software Engineer, Decelopeer Hub, Red Hat
+**Presenter:** Lucas Yoon, Software Engineer, Developeer Hub AI, Red Hat
+
+---
+
+
+## Project Structure
+
+```
+civichacks-demo/
+├── README.md                             # Project overview and demo flow
+├── USER_GUIDE.md                         # This comprehensive guide
+├── CivicHacks_Demo_Guide.pdf            # Printable presenter reference
+├── requirements.txt                      # Python dependencies (4 packages)
+├── data/                                 # Civic datasets (one per track)
+│   ├── ecohack_boston_environment.txt     # Boston environmental quality data
+│   ├── cityhack_boston_311.txt            # Boston 311 service request data
+│   ├── eduhack_boston_schools.txt         # Boston public schools equity data
+│   └── justicehack_ma_justice.txt        # MA criminal justice reform data
+├── userdata/                             # Drop your own files here for Step 4
+└── scripts/                              # Demo scripts (run in order)
+    ├── cost_estimator.py                 # Shared: local vs. cloud cost comparison
+    ├── demo_step1_ollama.py              # Step 1: Basic local AI inference
+    ├── demo_step2_rag.py                 # Step 2: RAG with civic data
+    ├── demo_step3_app.py                 # Step 3: Full Gradio web app
+    ├── demo_step4_byod.py               # Step 4: Bring Your Own Data (interactive)
+    └── demo_step5_byod_app.py           # Step 5: BYOD Web Application (Gradio)
+```
 
 ---
 
@@ -32,7 +58,10 @@ cd civichacks-demo
 brew install ollama
 
 # Linux
-# curl -fsSL https://ollama.com/install.sh | sh
+curl -fsSL https://ollama.com/install.sh | sh
+
+**Windows:**
+# Download the installer from [ollama.com](https://ollama.com)
 
 # Then pull the model (~4.7 GB — use the venue wifi or hotspot)
 ollama pull llama3.1
@@ -190,135 +219,6 @@ python scripts/demo_step3_app.py
 
 ---
 
-## Demo Flow — What to Do on Stage
-
-### STEP 1: "The 60-Second AI" (During Opening Segment, ~Minute 3)
-
-**Setup:** Terminal open, font size large enough for the back row.
-
-**Script:**
-> "I just told you that GPT-4-class models are free and open. Let me prove it. This laptop has no special hardware. I'm going to ask a local AI model — Llama 3.1, running right here, no cloud, no API key — a question about civic tech."
-
-**Run:**
-```bash
-python scripts/demo_step1_ollama.py
-```
-
-**What happens:** The script sends a civic-themed prompt to the local Ollama instance and streams the response token by token. The audience watches the AI generate in real time. At the end, it prints the time elapsed, tokens per second, and a **live cost comparison** — showing the actual electricity cost (fractions of a cent) versus what the same query would cost on GPT-4o.
-
-**Talking point while it generates:**
-> "Watch it go — this is the same architecture behind GPT-4. It's generating on this laptop's [CPU/GPU]. No internet required. No data leaving this machine."
-
-**After it finishes:**
-> "That took [X] seconds. Look at the cost line — local electricity cost was a fraction of a cent, versus what you'd pay on a cloud API. And that's just the raw model. Over the next 40 minutes, we're going to turn that into a real civic tech application."
-
----
-
-### STEP 2: "Connecting AI to Real Civic Data" (During Stack Evaluation, ~Minute 20)
-
-**Setup:** The audience has already voted on a track. Have the track key ready.
-
-**Script:**
-> "OK, so you've got a local AI. But a model by itself doesn't know anything about Boston. The magic happens when you connect it to real data. This is called RAG — Retrieval Augmented Generation — and it takes about 15 lines of Python."
-
-*Optionally show the code file briefly (the key lines are well-commented):*
-```bash
-# Show the relevant code if you want — it's intentionally readable
-cat scripts/demo_step2_rag.py | head -80
-```
-
-**Run (using the audience's voted track):**
-```bash
-# If they voted CityHack:
-python scripts/demo_step2_rag.py city
-
-# For all queries (if time allows):
-python scripts/demo_step2_rag.py city --all
-```
-
-**What happens:** The script loads the track-specific civic dataset, builds a vector index, and queries it. The AI's response is grounded in actual data — it cites specific statistics, neighborhoods, and findings from the documents.
-
-**Talking point while the index builds:**
-> "It's reading the city's data and building a search index. This is the same technique behind every enterprise AI chatbot — except we're doing it locally, for free, with open source tools."
-
-**After the answer:**
-> "Look at that — it pulled specific numbers from the city's own data. [Reference a specific stat from the answer]. That's not the model making things up. That's RAG — the model retrieves relevant chunks of real data before generating its answer. This is how you build civic tech that's actually trustworthy."
-
----
-
-### STEP 3: "From Script to Web App" (During Templates & Resources, ~Minute 32)
-
-**Setup:** This is the reveal moment. You've gone from terminal → data pipeline → now a real web application.
-
-**Script:**
-> "We've got a local AI that can answer questions about civic data. But hackathon judges aren't going to lean over your shoulder and watch a terminal. You need a demo. Watch how fast we can go from script to web app."
-
-**Run:**
-```bash
-python scripts/demo_step3_app.py
-```
-
-**What happens:** Gradio launches a web server and opens a polished chat interface in the browser. It has track selection, a dynamic header that updates per track, example questions that change when you switch tracks, a chat interface with per-query cost comparisons, and a footer showing the full stack. The audience sees a real, shareable web application.
-
-**Walk through the UI:**
-1. Point out the track selector — switch between datasets and watch the header and example questions update dynamically
-2. Click an example question — watch it query and respond with a live cost comparison in each answer
-3. Highlight the footer: "Ollama + LlamaIndex + Gradio · per-query cost estimate shown in each response"
-
-**Talking point:**
-> "This is a production-quality web interface built with Gradio. The entire UI is about 40 lines of Python. No React, no JavaScript, no frontend experience needed. And notice — when you switch tracks, the header, description, and example questions all update dynamically. And if you want to share it with judges or deploy it publicly, Hugging Face Spaces will host it for free."
-
-**The kicker:**
-> "Let's count what we used: Ollama — free. Llama 3.1 — free, open source. LlamaIndex — free, open source. Gradio — free, open source. Hosting — free. Every query shows you the real cost — fractions of a cent in electricity versus dollars on cloud APIs. That's what open source AI makes possible."
-
----
-
-### STEP 4: "Bring Your Own Data" (During Hands-on Segment)
-
-**Setup:** This is the interactive segment where attendees try it themselves. An audience member provides a file.
-
-**Script:**
-> "You've seen what our civic data can do. But what about YOUR data? Got a PDF, a spreadsheet, a text file? Drop it in and start asking questions — no code changes, no configuration."
-
-**Run:**
-```bash
-# Auto-discover files from userdata/ directory
-python scripts/demo_step4_byod.py
-
-# Load ALL files in userdata/ into one index (cross-file exploration)
-python scripts/demo_step4_byod.py --all
-
-# Or specify a file directly
-python scripts/demo_step4_byod.py ~/Downloads/my_report.pdf
-```
-
-**What happens:** The script auto-discovers files in the `userdata/` directory (or accepts a file path). It analyzes the file(s), builds a vector index, generates an AI summary, and enters an interactive Q&A loop. With `--all`, multiple files are loaded into a single index for cross-file exploration. Every query includes a cost comparison.
-
-**Talking point:**
-> "That's the whole point of open source AI — you're not limited to what we prepared. Any data, any question, running on your laptop. Now imagine what you could build this weekend."
-
----
-
-### STEP 5: "BYOD — Now as a Web App" (Optional Follow-up)
-
-**Setup:** Show the audience that the BYOD experience also works as a polished web app with drag-and-drop file upload.
-
-**Script:**
-> "We showed you BYOD in the terminal. But what if you want to share that with your team, or let someone non-technical use it? Same idea — one command, and it's a web app."
-
-**Run:**
-```bash
-python scripts/demo_step5_byod_app.py
-# Opens at http://localhost:7861
-```
-
-**What happens:** A Gradio web interface opens with drag-and-drop file upload, a userdata/ file selector, and an AI chat. Upload any file (or select from userdata/), get an AI summary, and ask questions — all in the browser. Supports loading multiple files into one index for cross-file exploration.
-
-**Talking point:**
-> "Same BYOD capability, now shareable. Upload files, get a summary, ask questions — all in the browser. And it runs on a different port, so you can have both the civic data app and the BYOD app running at the same time."
-
----
-
 ## Troubleshooting
 
 ### "Ollama isn't responding"
@@ -343,9 +243,6 @@ The HuggingFace embedding model (`all-MiniLM-L6-v2`) downloads on first use (~80
 BROWSER=chrome python scripts/demo_step3_app.py
 # Or open manually: http://localhost:7860
 ```
-
-### Backup Plan: Pre-Recorded Demo
-If wifi or hardware fails, have a screen recording of the full demo flow ready. Record it at the venue during setup so the environment looks authentic.
 
 ---
 

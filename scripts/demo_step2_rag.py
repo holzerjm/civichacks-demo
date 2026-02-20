@@ -1,11 +1,11 @@
 """
 ╔══════════════════════════════════════════════════════════════╗
-║  CIVICHACKS 2026 — LIVE DEMO STEP 2                        ║
-║  "Connecting AI to Real Civic Data"                         ║
+║  CIVICHACKS 2026 — LIVE DEMO STEP 2                          ║
+║  "Connecting AI to Real Civic Data"                          ║
 ║                                                              ║
-║  Proves: In ~15 lines of code, you can query real civic     ║
-║  documents with a local AI — no APIs, no cost               ║
-║  Time on stage: ~90 seconds (code is pre-written, just run) ║
+║  Proves: In ~15 lines of code, you can query real civic      ║
+║  documents with a local AI — no APIs, no cost                ║
+║  Time on stage: ~90 seconds (code is pre-written, just run)  ║
 ╚══════════════════════════════════════════════════════════════╝
 
 Run this during the Stack Evaluation segment (0:15-0:28).

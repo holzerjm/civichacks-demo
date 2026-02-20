@@ -1,11 +1,11 @@
 """
 ╔══════════════════════════════════════════════════════════════╗
-║  CIVICHACKS 2026 — LIVE DEMO STEP 3                        ║
-║  "From Script to Web App in 5 Lines of UI Code"            ║
+║  CIVICHACKS 2026 — LIVE DEMO STEP 3                          ║
+║  "From Script to Web App in 5 Lines of UI Code"              ║
 ║                                                              ║
-║  Proves: Wrapping your AI in a shareable web interface      ║
-║  takes minutes, not days                                    ║
-║  Time on stage: ~60 seconds (just run it, browser opens)    ║
+║  Proves: Wrapping your AI in a shareable web interface       ║
+║  takes minutes, not days                                     ║
+║  Time on stage: ~60 seconds (just run it, browser opens)     ║
 ╚══════════════════════════════════════════════════════════════╝
 
 Run this during the Templates & Resources segment (0:28-0:38).

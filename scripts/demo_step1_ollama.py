@@ -7,10 +7,6 @@
 ║  Time on stage: ~60 seconds                                 ║
 ╚══════════════════════════════════════════════════════════════╝
 
-Run this during the opening segment (0:00-0:05) right after
-the DeepSeek R1 story. The audience sees a local model respond
-in real time — no API key, no cloud, no cost.
-
 PREREQUISITE: Ollama installed and model pulled
   $ ollama pull llama3.1
 """
