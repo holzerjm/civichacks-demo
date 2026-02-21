@@ -362,7 +362,7 @@ Prerequisites:
   3. Install dependencies  pip install -r requirements.txt
 
 Examples:
-  python scripts/demo_step5_byod_app.py                    # Launch on port 7861
+  python scripts/demo_step5_byod_app.py                    # Launch on port 8861
   python scripts/demo_step5_byod_app.py --port 8080        # Custom port
   python scripts/demo_step5_byod_app.py --model phi3:mini  # Different model
   python scripts/demo_step5_byod_app.py --share            # Public URL
@@ -371,8 +371,8 @@ Examples:
     parser.add_argument(
         "--port",
         type=int,
-        default=7861,
-        help="Port to run the web server on (default: 7861)",
+        default=8861,
+        help="Port to run the web server on (default: 8861)",
     )
     parser.add_argument(
         "--model",

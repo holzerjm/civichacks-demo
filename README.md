@@ -98,7 +98,7 @@ python scripts/demo_step4_byod.py path/to/your/file.txt    # use a specific file
 
 # Step 5 — BYOD as a web app (upload files in the browser)
 python scripts/demo_step5_byod_app.py
-# Opens at http://localhost:7861
+# Opens at http://localhost:8861
 ```
 
 That's it — you now have a working civic AI application. From here you can:

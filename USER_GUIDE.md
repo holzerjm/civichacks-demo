@@ -637,7 +637,7 @@ A Gradio web application that provides the same BYOD functionality as Step 4, bu
 ### How to Run
 
 ```bash
-# Launch the web app (opens at http://localhost:7861)
+# Launch the web app (opens at http://localhost:8861)
 python scripts/demo_step5_byod_app.py
 
 # Custom port
@@ -678,7 +678,7 @@ python scripts/demo_step5_byod_app.py --help
 
 | Option | Default | Description |
 |--------|---------|-------------|
-| `--port` | `7861` | HTTP port for the web UI (different from Step 3's 7860) |
+| `--port` | `8861` | HTTP port for the web UI (different from Step 3's 7860) |
 | `--model` | `llama3.1` | Ollama model to use |
 | `--share` | off | Create a temporary public URL via Gradio's tunneling service |
 
