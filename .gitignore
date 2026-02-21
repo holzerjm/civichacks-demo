@@ -13,9 +13,9 @@ build/
 # HuggingFace cache (large model files)
 .cache/
 
-# User data (attendees drop files here for Step 4 BYOD)
-userdata/*
-!userdata/.gitkeep
+# User data — sample files for Step 4/5 BYOD demos
+# Other userdata-* directories are local-only (not tracked)
+userdata-*/
 
 # OS files
 .DS_Store
